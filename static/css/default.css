@@ -1,0 +1,70 @@
+.FunctionCallExprSyntax {
+  display: inline;
+}
+
+.comment {
+  color: #006a00;
+}
+
+.keyword,
+.atSign {
+  color: #aa0d91;
+}
+
+.stringLiteral {
+  color: #c41a16;
+}
+
+.importKeyword {
+  color: #1c00cf;
+}
+
+.box:hover {
+  border: 2px #0074D9 dashed;
+}
+.box>.c:hover {
+  border: 2px #0074D9 dashed;
+}
+
+[data-tooltip] {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+}
+
+[data-tooltip]:before,
+[data-tooltip]:after {
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  pointer-events: none;
+}
+
+[data-tooltip]:before {
+  position: absolute;
+  top: 0;
+  left: 10%;
+  margin-bottom: 5px;
+  margin-left: -80px;
+  padding: 7px;
+  width: 200px;
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  text-align: center;
+  font-size: 14px;
+  line-height: 1.2;
+}
+
+[data-tooltip]:hover:before,
+[data-tooltip]:hover:after {
+  visibility: visible;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+  filter: progid: DXImageTransform.Microsoft.Alpha(Opacity=100);
+  opacity: 1;
+}

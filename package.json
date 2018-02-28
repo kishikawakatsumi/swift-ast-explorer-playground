@@ -1,0 +1,22 @@
+{
+  "name": "playground",
+  "version": "0.1.0",
+  "description": "Swift AST Explorer",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kishikawakatsumi/swift-ast-explorer-playground.git"
+  },
+  "author": "Kishikawa Katsumi",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "compression": "^1.7.1",
+    "exports": "0.0.1",
+    "express": "^4.16.2",
+    "express-brute": "^1.0.1"
+  }
+}
