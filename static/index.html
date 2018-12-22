@@ -234,6 +234,7 @@ struct BlackjackCard {
           $("#swift-version").html(data.output.swiftVersion);
           if (data.errors) {
             $("#error-message").html('Syntax error.');
+            hideLoading();
             return false;
           }
 
