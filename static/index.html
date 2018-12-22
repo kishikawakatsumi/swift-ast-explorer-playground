@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gijgo@1.8.2/combined/css/gijgo.min.css" type="text/css" />
+    <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
     <link rel="stylesheet" href="css/default.css" type="text/css" />
 
     <link rel="apple-touch-icon" sizes="57x57" href="images/apple-icon-57x57.png">
@@ -60,6 +60,24 @@
         height: 60px; /* Set the fixed height of the footer here */
         line-height: 60px; /* Vertically center the text there */
         background-color: #F7F7F7;
+      }
+      #loading {
+        display: table;
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color: #000000;
+        opacity: 0.2;
+      }
+
+      #loading .loadingIndicator {
+        display: table-cell;
+        text-align: center;
+        vertical-align: middle;
+        padding-top: 140px;
+        background: url('images/Spinner-1s-100px.gif') center center no-repeat;
       }
     </style>
     <script src="https://use.fontawesome.com/ab7ee5aca9.js"></script>
@@ -152,10 +170,22 @@ struct BlackjackCard {
       </div>
     </footer>
 
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gijgo@1.8.2/combined/js/gijgo.min.js" type="text/javascript"></script>
+    <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
+
+    <script type="text/javascript">
+    function showLoading(){
+      if ($('#loading').length == 0) {
+        $('body').append("<div id='loading'><div class='loadingIndicator'></div></div>");
+      }
+    }
+
+    function hideLoading(){
+      $("#loading").remove();
+    }
+    </script>
 
     <script src="ace/ace.js"></script>
     <script src="ace/ext-language_tools.js"></script>
@@ -187,13 +217,15 @@ struct BlackjackCard {
         clearTimeout(timeout);
         timeout = setTimeout(function() {
           update(editor)
-        }, 1000);
+        }, 500);
       });
 
       const results = $("#results");
       let tree = null
 
       function update(editor) {
+        showLoading();
+
         const code = editor.getSession().getValue();
         const json = {
           code: code
@@ -206,7 +238,7 @@ struct BlackjackCard {
           }
 
           function unescapeHTML(str) {
-            var div = document.createElement("div");
+            let div = document.createElement("div");
             div.innerHTML = str.replace(/</g,"&lt;")
                                .replace(/>/g,"&gt;");
             return div.textContent || div.innerText;
@@ -216,12 +248,14 @@ struct BlackjackCard {
           if (tree) {
             tree.destroy();
           }
-          tree = $('#structure').tree({ dataSource: JSON.parse(unescapeHTML(data.output.structure)) });
+          tree = $('#structure').tree({ dataSource: JSON.parse(data.output.structure) });
 
           const children = tree.getChildren(tree)
-          for (var i = 0, len = children.length; i < len; i++) {
+          for (let i = 0, len = children.length; i < Math.min(len, 100); i++) {
             tree.expand(tree.getNodeById(children[i]));
           }
+
+          hideLoading();
 
           $('#structure').find('li').each(function(i, e) {
             const id = $(e).attr('data-id');
@@ -257,7 +291,7 @@ struct BlackjackCard {
 
           $('#results').find('span').each(function(i, e) {
             $(this).mouseover(function(e) {
-              var element = e.target;
+              let element = e.target;
               element.style.backgroundColor = 'rgba(81, 101, 255, 0.5)';
               $(this).tooltip("show");
               $(this).parents('span').each(function(i, e) {
@@ -269,13 +303,12 @@ struct BlackjackCard {
                 }
 
                 function createDOMRectElement(domRect) {
-                  var rectElements = document.getElementsByClassName('dom-rect');
-
-                  for (var i = 0, l = rectElements.length; l > i; i++) {
+                  let rectElements = document.getElementsByClassName('dom-rect');
+                  for (let i = 0, l = rectElements.length; l > i; i++) {
                     rectElements[0].parentNode.removeChild(rectElements[0]);
                   }
 
-                  var rectElement = document.createElement('div');
+                  let rectElement = document.createElement('div');
                   rectElement.className = 'dom-rect';
                   rectElement.style.left = (domRect.x - 1) + 'px';
                   rectElement.style.top = (domRect.y - 1) + 'px';
@@ -292,12 +325,17 @@ struct BlackjackCard {
               e.stopPropagation();
             });
             $(this).mouseout(function(e) {
-              var element = e.target;
+              let element = e.target;
               element.style.backgroundColor = '';
               $(this).tooltip("hide");
               $(this).parents('span').each(function(i, e) {
                 $(e).tooltip('hide');
               });
+
+              let rectElements = document.getElementsByClassName('dom-rect');
+              for (let i = 0, l = rectElements.length; l > i; i++) {
+                rectElements[0].parentNode.removeChild(rectElements[0]);
+              }
             });
           });
 
