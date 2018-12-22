@@ -244,7 +244,7 @@ struct BlackjackCard {
                                .replace(/>/g,"&gt;");
             return div.textContent || div.innerText;
           }
-          results.html(data.output.syntax);
+          results.html(unescapeHTML(data.output.syntax));
 
           if (tree) {
             tree.destroy();
