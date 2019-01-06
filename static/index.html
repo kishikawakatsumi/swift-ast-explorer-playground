@@ -277,6 +277,10 @@ struct BlackjackCard {
                 $(this).attr('data-placement', 'top');
                 $(this).attr('title', `<span style='color: gray;'>kind:</span> ${data.token.kind}<br><span style='color: gray;'>leadingTrivia:</span> ${data.token.leadingTrivia}<br><span style='color: gray;'>text:</span> ${data.text}<br><span style='color: gray;'>trailingTrivia:</span> ${data.token.trailingTrivia}`);
                 $(this).tooltip("show");
+
+                // Remove title that (for some reason) remains after showing tooltip
+                // to suppress browser's built-in tooltip.
+                $(this).removeAttr("title");
               }
 
               const Range = ace.require("ace/range").Range;
