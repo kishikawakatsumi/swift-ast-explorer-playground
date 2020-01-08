@@ -1,18 +1,11 @@
 'use strict';
 
 const Express = require("express");
-const ExpressBrute = require('express-brute');
 const BodyParser = require('body-parser');
 const Processor = require('./processor');
 const compression = require('compression')
 
 const app = Express();
-
-const store = new ExpressBrute.MemoryStore(); // stores state locally, don't use this in production
-const bruteforce = new ExpressBrute(store,{
-    freeRetries: 50,
-    lifetime: 3600
-});
 
 function random(size) {
   return require("crypto").randomBytes(size).toString('hex');
@@ -30,7 +23,7 @@ app.all('*', function(req, res, next) {
   next();
 });
 
-app.post('/update', bruteforce.prevent, function(req, res) {
+app.post('/update', function(req, res) {
   const path = __dirname + "/";
   const folder = 'temp/' + random(10);
   const filename = 'main.swift';
