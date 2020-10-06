@@ -1,4 +1,3 @@
-# swift-ast-explorer-playground
-Online playground for Swift AST Explorer
+# `kishikawakatsumi/swift-ast-explorer-playground` has moved!
 
-https://swift-ast-explorer.kishikawakatsumi.com/
+It has been integrated into [kishikawakatsumi/swift-ast-explorer](https://github.com/kishikawakatsumi/swift-ast-explorer).
